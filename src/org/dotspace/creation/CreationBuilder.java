@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
+import org.dotspace.creation.functional.Predicates;
 import org.dotspace.creation.policy.RootAccessingPolicy;
 
 public class CreationBuilder<T> {
@@ -24,7 +25,13 @@ public class CreationBuilder<T> {
 	}
 
 	public <V> CreationBuilder<T> set(BiConsumer<T, V> setter, V value) {
-		accessingPolicies.add(new RootAccessingPolicy<>(setter, value));
+		accessingPolicies.add(RootAccessingPolicy.noneConditional(setter, value));
+		return this;
+	}
+
+	public <V> CreationBuilder<T> setIfPresent(BiConsumer<T, V> setter, V value) {
+		accessingPolicies.add(RootAccessingPolicy.valueConditional(setter, value, 
+				Predicates.present()));
 		return this;
 	};
 

@@ -6,11 +6,11 @@ import java.util.function.BiConsumer;
 
 public class MemberAccessors {
 
-	public static <K, V> BiConsumer<Map<K, V>, V> put(K key, Class<V> valueClazz) {
+	public static <K, V> BiConsumer<Map<K, V>, V> put(K key) {
 		return (hash, v) -> hash.put(key, v);
 	}
 
-	public static <V> BiConsumer<List<V>, V> add(Class<V> valueClazz) {
+	public static <V> BiConsumer<List<V>, V> add() {
 		return (l, v) -> l.add(v);
 	}
 	
