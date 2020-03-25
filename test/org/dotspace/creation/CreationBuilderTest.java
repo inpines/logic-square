@@ -6,13 +6,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Optional;
 
 import org.dotspace.creation.constructor.Constructors;
 import org.junit.jupiter.api.Test;
 
 class CreationBuilderTest {
 
-	private class MyPojo {
+	public class Department {
 
 		private String name;
 
@@ -26,13 +27,42 @@ class CreationBuilderTest {
 		
 	}
 
+	private class MyPojo {
+
+		private String name;
+
+		private Department department;
+		
+		protected String getName() {
+			return name;
+		}
+
+		protected void setName(String name) {
+			this.name = name;
+		}
+
+		protected Department getDepartment() {
+			return Optional.ofNullable(department)
+					.orElseGet(() -> {
+						Department result = new Department();
+						setDepartment(result);
+						return result;
+					});
+		}
+
+		protected void setDepartment(Department department) {
+			this.department = department;
+		}
+		
+	}
+
 	@Test
 	public void testHashCreation() {
 		Map<String, Object> hash = Creations.construct(
 				Constructors.forHashMap(String.class, Object.class))
-				.set(MemberAccessors.put("name"), "peter")
-				.setIfPresent(MemberAccessors.put("date"), null)
-				.set(MemberAccessors.put("nullValue"), null)
+				.set(AdtAccessors.forMapToPutByKeyOf("name"), "peter")
+				.setIfPresent(AdtAccessors.forMapToPutByKeyOf("date"), null)
+				.set(AdtAccessors.forMapToPutByKeyOf("nullValue"), null)
 				.build();
 		
 		assertNotNull(hash);
@@ -44,7 +74,7 @@ class CreationBuilderTest {
 		assertTrue(null == hash.get("nullValue"));
 		Map<String, Object> hash1 = Creations.construct(
 				Constructors.forHashMap(String.class, Object.class))
-				.setIfPresent(MemberAccessors.put("date"), 
+				.setIfPresent(AdtAccessors.forMapToPutByKeyOf("date"), 
 						Calendar.getInstance().getTime())
 				.build();
 		assertNotNull(hash1);
@@ -58,11 +88,37 @@ class CreationBuilderTest {
 	public void testPojoCreation() {
 		MyPojo pojo = Creations.construct(MyPojo::new)
 				.set(MyPojo::setName, "myName")
+				.set(MyPojo::getDepartment, Department::setName, "myDepart")
 				.build();
 		
 		assertNotNull(pojo);
 		assertNotNull(pojo.getName());
 		assertEquals("myName", pojo.getName());
+		assertNotNull(pojo.getDepartment());
+		assertEquals("myDepart", pojo.getDepartment().getName());
 		
+		MyPojo pojo1 = Creations.construct(MyPojo::new)
+				.set(MyPojo::setName, "has value", x -> "a".equals(x), "a")
+				.set(MyPojo::getDepartment, Department::setName, "has myDepart", 
+						x -> "a".equals(x), "a")
+				.build();
+		
+		assertNotNull(pojo1);
+		assertEquals("has value", pojo1.getName());
+		assertNotNull(pojo1.getDepartment());
+		assertEquals("has myDepart", pojo1.getDepartment().getName());
+		
+		MyPojo pojo2 = Creations.construct(MyPojo::new)
+				.set(MyPojo::setName, "has value", x -> !"a".equals(x), "a")
+				.set(MyPojo::getDepartment, Department::setName, "has myDepart", 
+						x -> !"a".equals(x), "a")
+				.build();
+		
+		assertNotNull(pojo2);
+		assertEquals(null, pojo2.getName());
+		assertEquals(null, pojo2.department);
+		assertNotNull(pojo2.getDepartment());
+		assertEquals(null, pojo2.getDepartment().getName());
+
 	}
 }

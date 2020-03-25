@@ -1,19 +1,19 @@
-package org.dotspace.creation.policy;
+package org.dotspace.creation.writer;
 
 import java.util.function.Predicate;
 
-public class AccessingPolicyCondition<C> {
+public class CreationWriterCondition<C> {
 
 	private Predicate<C> predicate;
 	
 	private C cond;
 	
-	public AccessingPolicyCondition(Predicate<C> predicate, C cond) {
+	public CreationWriterCondition(Predicate<C> predicate, C cond) {
 		this.predicate = predicate;
 		this.cond = cond;
 	}
 
-	public boolean isValid() {
+	public boolean isPresent() {
 		if (null == predicate) {
 			return true;
 		}
