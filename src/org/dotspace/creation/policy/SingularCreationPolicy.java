@@ -4,9 +4,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import org.dotspace.creation.CreationPolicy;
-
-public class SingularCreationPolicy<T, M, V, C> extends CreationPolicyBase<T, V, C> implements CreationPolicy<T, V, C> {
+public class SingularCreationPolicy<T, M, V, C> extends CreationPolicyBase<T, V, C> {
 
 	private Function<T, M> getter;
 	private BiConsumer<M, V> setter;

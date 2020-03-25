@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.dotspace.creation.CreationPolicy;
-
-public class PluralCreationPolicy<T, I, V, C> extends CreationPolicyBase<T, V, C> implements CreationPolicy<T, V, C> {
+public class PluralCreationPolicy<T, I, V, C> extends CreationPolicyBase<T, V, C> {
 
 	private Function<T, Collection<I>> getter;
 	private Function<V, I> itemSelector;

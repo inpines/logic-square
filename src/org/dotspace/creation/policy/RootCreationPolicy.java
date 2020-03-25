@@ -2,9 +2,7 @@ package org.dotspace.creation.policy;
 
 import java.util.function.BiConsumer;
 
-import org.dotspace.creation.CreationPolicy;
-
-public class RootCreationPolicy<T, V, C> extends CreationPolicyBase<T, V, C> implements CreationPolicy<T, V, C> {
+public class RootCreationPolicy<T, V, C> extends CreationPolicyBase<T, V, C> {
 
 	private BiConsumer<T, V> setter;
 
