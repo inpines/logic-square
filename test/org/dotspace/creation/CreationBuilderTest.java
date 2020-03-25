@@ -5,10 +5,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
 import org.dotspace.creation.constructor.Constructors;
+import org.dotspace.creation.policy.CreationCondition;
+import org.dotspace.creation.policy.RootCreationPolicy;
+import org.dotspace.creation.policy.SingularCreationPolicy;
 import org.junit.jupiter.api.Test;
 
 class CreationBuilderTest {
@@ -58,11 +62,19 @@ class CreationBuilderTest {
 
 	@Test
 	public void testHashCreation() {
+		Date nullDate = null;
 		Map<String, Object> hash = Creations.construct(
 				Constructors.forHashMap(String.class, Object.class))
-				.set(AdtAccessors.forMapToPutByKeyOf("name"), "peter")
-				.setIfPresent(AdtAccessors.forMapToPutByKeyOf("date"), null)
-				.set(AdtAccessors.forMapToPutByKeyOf("nullValue"), null)
+				.take(RootCreationPolicy.withAssignment(
+						AdtAccessors.forMapToPutByKeyOf(
+								"name", Object.class), "peter"))
+				.take(RootCreationPolicy.withAssignment(
+						AdtAccessors.forMapToPutByKeyOf(
+								"date", Object.class), nullDate)
+						.when(CreationCondition.forValuePresent(nullDate)))
+				.take(RootCreationPolicy.withAssignment(
+						AdtAccessors.forMapToPutByKeyOf(
+								"nullValue", Object.class), null))
 				.build();
 		
 		assertNotNull(hash);
@@ -72,10 +84,14 @@ class CreationBuilderTest {
 		assertTrue(!hash.containsKey("date"));
 		assertTrue(hash.containsKey("nullValue"));
 		assertTrue(null == hash.get("nullValue"));
+		
+		Date curDate = Calendar.getInstance().getTime();
+		
 		Map<String, Object> hash1 = Creations.construct(
 				Constructors.forHashMap(String.class, Object.class))
-				.setIfPresent(AdtAccessors.forMapToPutByKeyOf("date"), 
-						Calendar.getInstance().getTime())
+				.take(RootCreationPolicy.withAssignment(
+						AdtAccessors.forMapToPutByKeyOf("date", Object.class), curDate)
+						.when(CreationCondition.forValuePresent(curDate)))
 				.build();
 		assertNotNull(hash1);
 		assertTrue(!hash1.isEmpty());
@@ -87,8 +103,9 @@ class CreationBuilderTest {
 	@Test
 	public void testPojoCreation() {
 		MyPojo pojo = Creations.construct(MyPojo::new)
-				.set(MyPojo::setName, "myName")
-				.set(MyPojo::getDepartment, Department::setName, "myDepart")
+				.take(RootCreationPolicy.withAssignment(MyPojo::setName, "myName"))
+				.take(SingularCreationPolicy.withAssignment(
+						MyPojo::getDepartment, Department::setName, "myDepart"))
 				.build();
 		
 		assertNotNull(pojo);
@@ -98,9 +115,11 @@ class CreationBuilderTest {
 		assertEquals("myDepart", pojo.getDepartment().getName());
 		
 		MyPojo pojo1 = Creations.construct(MyPojo::new)
-				.set(MyPojo::setName, "has value", x -> "a".equals(x), "a")
-				.set(MyPojo::getDepartment, Department::setName, "has myDepart", 
-						x -> "a".equals(x), "a")
+				.take(RootCreationPolicy.withAssignment(MyPojo::setName, "has value")
+						.when(CreationCondition.forPredicate(x -> "a".equals(x), "a")))
+				.take(SingularCreationPolicy.withAssignment(
+						MyPojo::getDepartment, Department::setName, "has myDepart")
+						.when(CreationCondition.forPredicate(x -> "a".equals(x), "a")))
 				.build();
 		
 		assertNotNull(pojo1);
@@ -109,9 +128,11 @@ class CreationBuilderTest {
 		assertEquals("has myDepart", pojo1.getDepartment().getName());
 		
 		MyPojo pojo2 = Creations.construct(MyPojo::new)
-				.set(MyPojo::setName, "has value", x -> !"a".equals(x), "a")
-				.set(MyPojo::getDepartment, Department::setName, "has myDepart", 
-						x -> !"a".equals(x), "a")
+				.take(RootCreationPolicy.withAssignment(MyPojo::setName, "has value")
+						.when(CreationCondition.forPredicate(x -> !"a".equals(x), "a")))
+				.take(SingularCreationPolicy.withAssignment(
+						MyPojo::getDepartment, Department::setName, "has myDepart")
+						.when(CreationCondition.forPredicate(x -> !"a".equals(x), "a")))
 				.build();
 		
 		assertNotNull(pojo2);

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Predicates {
 
-	public static <T> Predicate<T> present() {
+	public static <T> Predicate<T> forPresent() {
 		return value -> {
 			if (Objects.isNull(value)) {
 				return false;
