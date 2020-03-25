@@ -1,6 +1,6 @@
 package org.dotspace.creation;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -11,7 +11,7 @@ public class AdtAccessors {
 		return (hash, v) -> hash.put(key, v);
 	}
 
-	public static <V> BiConsumer<List<V>, V> forListToAdd(Class<V> clazz) {
+	public static <V> BiConsumer<Collection<V>, V> forAddition(Class<V> clazz) {
 		return (l, v) -> l.add(v);
 	}
 	
