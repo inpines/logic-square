@@ -1,2 +1,2 @@
 # logic-square
-hello
+to develope some functional programming utilities to enhances OOAD approach
