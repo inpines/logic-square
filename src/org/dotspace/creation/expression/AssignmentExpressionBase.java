@@ -1,24 +1,26 @@
 package org.dotspace.creation.expression;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+
 import org.dotspace.creation.AssignmentExpression;
-import org.dotspace.creation.AssignmentPredicate;
 
 public abstract class AssignmentExpressionBase<T, V> implements AssignmentExpression<T, V> {
 
-	protected AssignmentPredicate<T, ?> condition;
+	protected Predicate<T> predicate;
 	
 	@Override
-	public <C> AssignmentExpression<T, V> filter(AssignmentPredicate<T, C> condition) {
-		this.condition = condition;
+	public AssignmentExpression<T, V> filter(Predicate<T> predicate) {
+		this.predicate = predicate;
 		return this;
 	}
 
 	protected boolean isConditionPresent(T instance) {
-		if (null == condition) {
+		if (null == predicate) {
 			return true;
 		}
 		
-		return condition.isPresent(instance);
+		return Optional.ofNullable(instance).filter(predicate).isPresent();
 	}
 	
 }

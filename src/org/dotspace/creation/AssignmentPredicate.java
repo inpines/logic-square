@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 import org.dotspace.creation.functional.Predicates;
 
-public class AssignmentPredicate<T, C> {
+public class AssignmentPredicate<T, C> implements Predicate<T> {
 
 	private Predicate<C> predicate;
 	
@@ -17,19 +17,6 @@ public class AssignmentPredicate<T, C> {
 		super();
 		this.predicate = predicate;
 		this.stateSelector = stateSelector;
-	}
-
-	public boolean isPresent(T instance) {
-		if (null == predicate) {
-			return true;
-		}
-		
-		C cond = Optional.ofNullable(instance)
-				.map(stateSelector)
-				.orElse(null);
-		
-		return predicate.test(cond);
-		
 	}
 
 	public static <T, V> AssignmentPredicate<T, V> ifPresent(V value) {
@@ -44,6 +31,19 @@ public class AssignmentPredicate<T, C> {
 	public static <T, V> AssignmentPredicate<T, V> ifMatch(
 			Predicate<V> predicate, Function<T, V> valueSelector) {
 		return new AssignmentPredicate<>(predicate, valueSelector);
+	}
+
+	@Override
+	public boolean test(T instance) {
+		if (null == predicate) {
+			return true;
+		}
+		
+		C cond = Optional.ofNullable(instance)
+				.map(stateSelector)
+				.orElse(null);
+		
+		return predicate.test(cond);
 	}
 	
 }

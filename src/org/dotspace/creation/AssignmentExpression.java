@@ -1,8 +1,10 @@
 package org.dotspace.creation;
 
+import java.util.function.Predicate;
+
 public interface AssignmentExpression<T, V> {
 
-	public <C> AssignmentExpression<T, V> filter(AssignmentPredicate<T, C> condition);
+	public AssignmentExpression<T, V> filter(Predicate<T> predicate);
 	
 	public void assign(T instance);
 	
