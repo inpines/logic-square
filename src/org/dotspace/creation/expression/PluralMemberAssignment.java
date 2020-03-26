@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class PluralMemberAssignment<T, I, V> extends AssignmentExpressionBase<T, V> {
+public class PluralMemberAssignment<T, I, V> extends AssignmentExpressionBase<T, Collection<V>> {
 
 	private Function<T, Collection<I>> getter;
 	private Function<V, I> itemSelector;
 	private Collection<V> values;
 	
-	public static <T, I, V> PluralMemberAssignment<T, I, V> withAssignment(
+	public static <T, I, V> PluralMemberAssignment<T, I, V> get(
 			Function<T, Collection<I>> getter, Function<V, I> itemSelector, 
 			Collection<V> values) {
 		return new PluralMemberAssignment<>(getter, itemSelector, values);

@@ -2,13 +2,13 @@ package org.dotspace.creation.expression;
 
 import java.util.function.BiConsumer;
 
-public class RootAssignment<T, V, C> extends AssignmentExpressionBase<T, V> {
+public class RootAssignment<T, V> extends AssignmentExpressionBase<T, V> {
 
 	private BiConsumer<T, V> setter;
 
 	private V value;
 	
-	public static <T, V, C> RootAssignment<T, V, C> withAssignment(
+	public static <T, V, C> RootAssignment<T, V> get(
 			BiConsumer<T, V> setter, V value) {
 		return new RootAssignment<>(setter, value);
 	}

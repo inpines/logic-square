@@ -38,7 +38,7 @@ public class SingularMemberAssignment<T, M, V> extends AssignmentExpressionBase<
 		return result;
 	}
 
-	public static <T, M, V> SingularMemberAssignment<T, M, V> withAssignment(
+	public static <T, M, V> SingularMemberAssignment<T, M, V> get(
 			Function<T, M> getter, BiConsumer<M, V> setter, V value) {
 		return new SingularMemberAssignment<>(getter, setter, value);
 	}

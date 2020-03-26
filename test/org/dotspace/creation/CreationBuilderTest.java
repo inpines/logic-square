@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.dotspace.creation.expression.Assignments;
+import org.dotspace.creation.expression.PluralMemberPath;
+import org.dotspace.creation.expression.SingularPath;
 import org.dotspace.creation.functional.Constructors;
 import org.junit.jupiter.api.Test;
 
@@ -123,13 +125,15 @@ class CreationBuilderTest {
 		Date nullDate = null;
 		Map<String, Object> hash = Creations.construct(
 				Constructors.forHashMap(String.class, Object.class))
-				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
-						"name", Object.class), "peter"))
-				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
-						"date", Object.class), nullDate).filter(
+//				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
+//						"name", Object.class), "peter"))
+				.take(SingularPath.getRootToSet(AdtAccessors.forMapToPutByKeyOf(
+						"name", Object.class)).assign("peter"))
+				.take(SingularPath.getRootToSet(AdtAccessors.forMapToPutByKeyOf(
+						"date", Object.class)).assign(nullDate).filter(
 								PredicateExpression.ifPresent(nullDate)))
-				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
-						"nullValue", Object.class), null))
+				.take(SingularPath.getRootToSet(AdtAccessors.forMapToPutByKeyOf(
+						"nullValue", Object.class)).assign(null))
 				.build();
 		
 		assertNotNull(hash);
@@ -209,16 +213,13 @@ class CreationBuilderTest {
 		List<String> dtls = Arrays.asList("dtl1", "dtl2", "dtl3");
 		
 		MyPojo pojo = Creations.construct(MyPojo::new)
-//				.take(PluralMemberAssignment.withAssignment(MyPojo::getDetails, 
-//						name -> Creations
+//				.take(Assignments.setForEach(MyPojo::getDetails, name -> Creations
 //						.construct(MyPojoDetail::new)
-//						.take(RootAssignment.withAssignment(
-//								MyPojoDetail::setDtlName, name))
+//						.take(Assignments.set(MyPojoDetail::setDtlName, name))
 //						.build(), dtls))
-				.take(Assignments.setForEach(MyPojo::getDetails, name -> Creations
-						.construct(MyPojoDetail::new)
-						.take(Assignments.set(MyPojoDetail::setDtlName, name))
-						.build(), dtls))
+				.take(PluralMemberPath.getToSet(
+						MyPojo::getDetails, this::getPojoDetail)
+						.assign(dtls))
 				.build();
 		
 		assertNotNull(pojo);
@@ -229,5 +230,11 @@ class CreationBuilderTest {
 		assertEquals(dtls.get(1), pojo.getDetails().get(1).dtlName);
 		assertEquals(dtls.get(2), pojo.getDetails().get(2).dtlName);
 		
+	}
+	
+	private MyPojoDetail getPojoDetail(String name) {
+		return Creations.construct(MyPojoDetail::new)
+				.take(Assignments.set(MyPojoDetail::setDtlName, name))
+				.build();
 	}
 }
