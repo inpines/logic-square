@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.dotspace.creation.expression.Assignments;
-import org.dotspace.creation.expression.PluralMemberAssignment;
 import org.dotspace.creation.expression.RootAssignment;
 import org.dotspace.creation.expression.SingularMemberAssignment;
 import org.dotspace.creation.functional.Constructors;
