@@ -6,13 +6,13 @@ import java.util.function.Predicate;
 
 import org.dotspace.creation.functional.Predicates;
 
-public class PredicateExpression<T, C> {
+public class AssignmentPredicate<T, C> {
 
 	private Predicate<C> predicate;
 	
 	private Function<T, C> stateSelector;
 	
-	protected PredicateExpression(Predicate<C> predicate, 
+	protected AssignmentPredicate(Predicate<C> predicate, 
 			Function<T, C> stateSelector) {
 		super();
 		this.predicate = predicate;
@@ -32,18 +32,18 @@ public class PredicateExpression<T, C> {
 		
 	}
 
-	public static <T, V> PredicateExpression<T, V> ifPresent(V value) {
-		return new PredicateExpression<>(Predicates.forPresent(), inst -> value);
+	public static <T, V> AssignmentPredicate<T, V> ifPresent(V value) {
+		return new AssignmentPredicate<>(Predicates.forPresent(), inst -> value);
 	}
 
-	public static <T, C> PredicateExpression<T, C> ifMatch(
+	public static <T, C> AssignmentPredicate<T, C> ifMatch(
 			Predicate<C> predicate, C condition) {
-		return new PredicateExpression<>(predicate, inst -> condition);
+		return new AssignmentPredicate<>(predicate, inst -> condition);
 	}
 	
-	public static <T, V> PredicateExpression<T, V> ifMatch(
+	public static <T, V> AssignmentPredicate<T, V> ifMatch(
 			Predicate<V> predicate, Function<T, V> valueSelector) {
-		return new PredicateExpression<>(predicate, valueSelector);
+		return new AssignmentPredicate<>(predicate, valueSelector);
 	}
 	
 }

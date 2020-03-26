@@ -131,7 +131,7 @@ class CreationBuilderTest {
 						"name", Object.class)).assign("peter"))
 				.take(SingularPath.getRootToSet(AdtAccessors.forMapToPutByKeyOf(
 						"date", Object.class)).assign(nullDate).filter(
-								PredicateExpression.ifPresent(nullDate)))
+								AssignmentPredicate.ifPresent(nullDate)))
 				.take(SingularPath.getRootToSet(AdtAccessors.forMapToPutByKeyOf(
 						"nullValue", Object.class)).assign(null))
 				.build();
@@ -150,7 +150,7 @@ class CreationBuilderTest {
 				Constructors.forHashMap(String.class, Object.class))
 				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
 						"date", Object.class), curDate).filter(
-								PredicateExpression.ifPresent(curDate)))
+								AssignmentPredicate.ifPresent(curDate)))
 				.build();
 		assertNotNull(hash1);
 		assertTrue(!hash1.isEmpty());
@@ -175,10 +175,10 @@ class CreationBuilderTest {
 		
 		MyPojo pojo1 = Creations.construct(MyPojo::new)
 				.take(Assignments.set(MyPojo::setName, "has value")
-						.filter(PredicateExpression.ifMatch(x -> "a".equals(x), "a")))
+						.filter(AssignmentPredicate.ifMatch(x -> "a".equals(x), "a")))
 				.take(Assignments.set(MyPojo::getDepartment, 
 						Department::setName, "has myDepart").filter(
-								PredicateExpression.ifMatch(x -> "a".equals(x), "a")))
+								AssignmentPredicate.ifMatch(x -> "a".equals(x), "a")))
 				.build();
 		
 		assertNotNull(pojo1);
@@ -190,13 +190,13 @@ class CreationBuilderTest {
 //				.take(RootAssignment.withAssignment(MyPojo::setName, "has value")
 //						.filter(PredicateExpression.ifMatch(x -> !"a".equals(x), "a")))
 				.take(Assignments.set(MyPojo::setName, "has value")
-						.filter(PredicateExpression.ifMatch(x -> !"a".equals(x), "a")))
+						.filter(AssignmentPredicate.ifMatch(x -> !"a".equals(x), "a")))
 //				.take(SingularMemberAssignment.withAssignment(
 //						MyPojo::getDepartment, Department::setName, "has myDepart")
 //						.filter(PredicateExpression.ifMatch(x -> !"a".equals(x), "a")))
 				.take(Assignments.set(MyPojo::getDepartment, 
 						Department::setName, "has myDepart")
-						.filter(PredicateExpression.ifMatch(x -> !"a".equals(x), "a")))
+						.filter(AssignmentPredicate.ifMatch(x -> !"a".equals(x), "a")))
 				.build();
 		
 		assertNotNull(pojo2);
