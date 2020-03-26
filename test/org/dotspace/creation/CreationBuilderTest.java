@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.dotspace.creation.expression.Assignments;
+import org.dotspace.creation.expression.PluralMemberAssignment;
+import org.dotspace.creation.expression.RootAssignment;
+import org.dotspace.creation.expression.SingularMemberAssignment;
 import org.dotspace.creation.functional.Constructors;
-import org.dotspace.creation.policy.CreationCondition;
-import org.dotspace.creation.policy.PluralCreationPolicy;
-import org.dotspace.creation.policy.RootCreationPolicy;
-import org.dotspace.creation.policy.SingularCreationPolicy;
 import org.junit.jupiter.api.Test;
 
 class CreationBuilderTest {
@@ -126,16 +126,13 @@ class CreationBuilderTest {
 		Date nullDate = null;
 		Map<String, Object> hash = Creations.construct(
 				Constructors.forHashMap(String.class, Object.class))
-				.take(RootCreationPolicy.withAssignment(
-						AdtAccessors.forMapToPutByKeyOf(
-								"name", Object.class), "peter"))
-				.take(RootCreationPolicy.withAssignment(
-						AdtAccessors.forMapToPutByKeyOf(
-								"date", Object.class), nullDate)
-						.when(CreationCondition.forValuePresent(nullDate)))
-				.take(RootCreationPolicy.withAssignment(
-						AdtAccessors.forMapToPutByKeyOf(
-								"nullValue", Object.class), null))
+				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
+						"name", Object.class), "peter"))
+				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
+						"date", Object.class), nullDate).filter(
+								PredicateExpression.ifPresent(nullDate)))
+				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
+						"nullValue", Object.class), null))
 				.build();
 		
 		assertNotNull(hash);
@@ -150,9 +147,9 @@ class CreationBuilderTest {
 		
 		Map<String, Object> hash1 = Creations.construct(
 				Constructors.forHashMap(String.class, Object.class))
-				.take(RootCreationPolicy.withAssignment(
-						AdtAccessors.forMapToPutByKeyOf("date", Object.class), curDate)
-						.when(CreationCondition.forValuePresent(curDate)))
+				.take(Assignments.set(AdtAccessors.forMapToPutByKeyOf(
+						"date", Object.class), curDate).filter(
+								PredicateExpression.ifPresent(curDate)))
 				.build();
 		assertNotNull(hash1);
 		assertTrue(!hash1.isEmpty());
@@ -164,8 +161,8 @@ class CreationBuilderTest {
 	@Test
 	public void testPojoCreation() {
 		MyPojo pojo = Creations.construct(MyPojo::new)
-				.take(RootCreationPolicy.withAssignment(MyPojo::setName, "myName"))
-				.take(SingularCreationPolicy.withAssignment(
+				.take(RootAssignment.withAssignment(MyPojo::setName, "myName"))
+				.take(SingularMemberAssignment.withAssignment(
 						MyPojo::getDepartment, Department::setName, "myDepart"))
 				.build();
 		
@@ -176,11 +173,11 @@ class CreationBuilderTest {
 		assertEquals("myDepart", pojo.getDepartment().getName());
 		
 		MyPojo pojo1 = Creations.construct(MyPojo::new)
-				.take(RootCreationPolicy.withAssignment(MyPojo::setName, "has value")
-						.when(CreationCondition.forPredicate(x -> "a".equals(x), "a")))
-				.take(SingularCreationPolicy.withAssignment(
-						MyPojo::getDepartment, Department::setName, "has myDepart")
-						.when(CreationCondition.forPredicate(x -> "a".equals(x), "a")))
+				.take(Assignments.set(MyPojo::setName, "has value")
+						.filter(PredicateExpression.ifMatch(x -> "a".equals(x), "a")))
+				.take(Assignments.set(MyPojo::getDepartment, 
+						Department::setName, "has myDepart").filter(
+								PredicateExpression.ifMatch(x -> "a".equals(x), "a")))
 				.build();
 		
 		assertNotNull(pojo1);
@@ -189,11 +186,16 @@ class CreationBuilderTest {
 		assertEquals("has myDepart", pojo1.getDepartment().getName());
 		
 		MyPojo pojo2 = Creations.construct(MyPojo::new)
-				.take(RootCreationPolicy.withAssignment(MyPojo::setName, "has value")
-						.when(CreationCondition.forPredicate(x -> !"a".equals(x), "a")))
-				.take(SingularCreationPolicy.withAssignment(
-						MyPojo::getDepartment, Department::setName, "has myDepart")
-						.when(CreationCondition.forPredicate(x -> !"a".equals(x), "a")))
+//				.take(RootAssignment.withAssignment(MyPojo::setName, "has value")
+//						.filter(PredicateExpression.ifMatch(x -> !"a".equals(x), "a")))
+				.take(Assignments.set(MyPojo::setName, "has value")
+						.filter(PredicateExpression.ifMatch(x -> !"a".equals(x), "a")))
+//				.take(SingularMemberAssignment.withAssignment(
+//						MyPojo::getDepartment, Department::setName, "has myDepart")
+//						.filter(PredicateExpression.ifMatch(x -> !"a".equals(x), "a")))
+				.take(Assignments.set(MyPojo::getDepartment, 
+						Department::setName, "has myDepart")
+						.filter(PredicateExpression.ifMatch(x -> !"a".equals(x), "a")))
 				.build();
 		
 		assertNotNull(pojo2);
@@ -210,10 +212,15 @@ class CreationBuilderTest {
 		List<String> dtls = Arrays.asList("dtl1", "dtl2", "dtl3");
 		
 		MyPojo pojo = Creations.construct(MyPojo::new)
-				.take(PluralCreationPolicy.withAssignment(MyPojo::getDetails, 
-						name -> Creations
+//				.take(PluralMemberAssignment.withAssignment(MyPojo::getDetails, 
+//						name -> Creations
+//						.construct(MyPojoDetail::new)
+//						.take(RootAssignment.withAssignment(
+//								MyPojoDetail::setDtlName, name))
+//						.build(), dtls))
+				.take(Assignments.setForEach(MyPojo::getDetails, name -> Creations
 						.construct(MyPojoDetail::new)
-						.take(RootCreationPolicy.withAssignment(
+						.take(RootAssignment.withAssignment(
 								MyPojoDetail::setDtlName, name))
 						.build(), dtls))
 				.build();

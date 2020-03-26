@@ -1,22 +1,22 @@
-package org.dotspace.creation.policy;
+package org.dotspace.creation.expression;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class PluralCreationPolicy<T, I, V, C> extends CreationPolicyBase<T, V, C> {
+public class PluralMemberAssignment<T, I, V> extends AssignmentExpressionBase<T, V> {
 
 	private Function<T, Collection<I>> getter;
 	private Function<V, I> itemSelector;
 	private Collection<V> values;
 	
-	public static <T, I, V, C> PluralCreationPolicy<T, I, V, C> withAssignment(
+	public static <T, I, V> PluralMemberAssignment<T, I, V> withAssignment(
 			Function<T, Collection<I>> getter, Function<V, I> itemSelector, 
 			Collection<V> values) {
-		return new PluralCreationPolicy<>(getter, itemSelector, values);
+		return new PluralMemberAssignment<>(getter, itemSelector, values);
 	}
 	
-	protected PluralCreationPolicy(Function<T, Collection<I>> getter, 
+	protected PluralMemberAssignment(Function<T, Collection<I>> getter, 
 			Function<V, I> itemSelector,
 			Collection<V> values) {
 		super();
@@ -26,7 +26,7 @@ public class PluralCreationPolicy<T, I, V, C> extends CreationPolicyBase<T, V, C
 	}
 
 	@Override
-	public void write(T instance) {
+	public void assign(T instance) {
 		if (!isConditionPresent(instance) || null == itemSelector) {
 			return;
 		}
