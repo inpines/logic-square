@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.dotspace.creation.expression.Assignments;
-import org.dotspace.creation.expression.RootAssignment;
-import org.dotspace.creation.expression.SingularMemberAssignment;
 import org.dotspace.creation.functional.Constructors;
 import org.junit.jupiter.api.Test;
 
@@ -160,8 +158,8 @@ class CreationBuilderTest {
 	@Test
 	public void testPojoCreation() {
 		MyPojo pojo = Creations.construct(MyPojo::new)
-				.take(RootAssignment.withAssignment(MyPojo::setName, "myName"))
-				.take(SingularMemberAssignment.withAssignment(
+				.take(Assignments.set(MyPojo::setName, "myName"))
+				.take(Assignments.set(
 						MyPojo::getDepartment, Department::setName, "myDepart"))
 				.build();
 		
@@ -219,8 +217,7 @@ class CreationBuilderTest {
 //						.build(), dtls))
 				.take(Assignments.setForEach(MyPojo::getDetails, name -> Creations
 						.construct(MyPojoDetail::new)
-						.take(RootAssignment.withAssignment(
-								MyPojoDetail::setDtlName, name))
+						.take(Assignments.set(MyPojoDetail::setDtlName, name))
 						.build(), dtls))
 				.build();
 		
