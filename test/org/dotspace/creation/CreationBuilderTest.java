@@ -16,9 +16,9 @@ import org.dotspace.creation.expression.Assignments;
 import org.dotspace.creation.expression.PluralMemberPath;
 import org.dotspace.creation.expression.SingularPath;
 import org.dotspace.creation.functional.Constructors;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class CreationBuilderTest {
+public class CreationBuilderTest {
 
 	public class MyPojoDetail {
 

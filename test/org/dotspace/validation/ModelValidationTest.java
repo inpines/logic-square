@@ -1,8 +1,8 @@
 package org.dotspace.validation;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,10 +13,9 @@ import org.dotspace.creation.Creations;
 import org.dotspace.creation.expression.PluralMemberPath;
 import org.dotspace.creation.expression.SingularPath;
 import org.dotspace.creation.functional.Casters;
-import org.junit.Test;
-
-import org.dotspace.validation.policy.SingularMemberValidationPolicy;
 import org.dotspace.validation.policy.PluralMemberValidationPolicy;
+import org.dotspace.validation.policy.SingularMemberValidationPolicy;
+import org.junit.Test;
 
 public class ModelValidationTest {
 
