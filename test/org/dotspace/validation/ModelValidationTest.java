@@ -9,12 +9,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.dotspace.creation.Creations;
-import org.dotspace.creation.expression.PluralMemberPath;
-import org.dotspace.creation.expression.SingularPath;
-import org.dotspace.creation.functional.Casters;
-import org.dotspace.validation.policy.PluralMemberValidationPolicy;
-import org.dotspace.validation.policy.SingularMemberValidationPolicy;
+import org.dotspace.v1.creation.Creations;
+import org.dotspace.v1.creation.expression.PluralMemberPath;
+import org.dotspace.v1.creation.expression.SingularPath;
+import org.dotspace.v1.creation.functional.Casters;
+import org.dotspace.v1.validation.ModelValidations;
+import org.dotspace.v1.validation.ModelViolation;
+import org.dotspace.v1.validation.ValidationBuilder;
+import org.dotspace.v1.validation.ValidationsContext;
+import org.dotspace.v1.validation.policy.PluralMemberValidationPolicy;
+import org.dotspace.v1.validation.policy.SingularMemberValidationPolicy;
 import org.junit.Test;
 
 public class ModelValidationTest {

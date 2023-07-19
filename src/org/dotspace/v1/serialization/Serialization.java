@@ -1,4 +1,4 @@
-package org.dotspace.serialization;
+package org.dotspace.v1.serialization;
 
 import java.util.function.Function;
 

@@ -1,10 +1,10 @@
-package org.dotspace.creation;
+package org.dotspace.v1.creation;
 
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.dotspace.creation.functional.Predicates;
+import org.dotspace.v1.creation.functional.Predicates;
 
 public class AssignmentPredicate<T, C> implements Predicate<T> {
 

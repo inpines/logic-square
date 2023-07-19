@@ -1,4 +1,4 @@
-package org.dotspace.creation;
+package org.dotspace.v1.creation;
 
 import java.util.Collection;
 import java.util.Map;

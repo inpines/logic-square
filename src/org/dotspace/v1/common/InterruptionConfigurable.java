@@ -1,4 +1,4 @@
-package org.dotspace.common;
+package org.dotspace.v1.common;
 
 public interface InterruptionConfigurable<T> {
 

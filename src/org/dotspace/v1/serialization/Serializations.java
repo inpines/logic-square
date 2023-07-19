@@ -1,8 +1,8 @@
-package org.dotspace.serialization;
+package org.dotspace.v1.serialization;
 
-import org.dotspace.creation.Creations;
-import org.dotspace.creation.expression.SingularPath;
-import org.dotspace.serialization.impl.SerializationImpl;
+import org.dotspace.v1.creation.Creations;
+import org.dotspace.v1.creation.expression.SingularPath;
+import org.dotspace.v1.serialization.impl.SerializationImpl;
 
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;

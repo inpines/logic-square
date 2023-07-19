@@ -6,8 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
-import org.dotspace.creation.Creations;
-import org.dotspace.creation.expression.SingularPath;
+import org.dotspace.v1.creation.Creations;
+import org.dotspace.v1.creation.expression.SingularPath;
+import org.dotspace.v1.serialization.Serializations;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;

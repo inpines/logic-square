@@ -1,10 +1,10 @@
-package org.dotspace.creation.expression;
+package org.dotspace.v1.creation.expression;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import org.dotspace.creation.AssignmentExpression;
-import org.dotspace.creation.AssignmentPath;
+import org.dotspace.v1.creation.AssignmentExpression;
+import org.dotspace.v1.creation.AssignmentPath;
 
 public class SingularPath<T, M, V> implements AssignmentPath<T, V> {
 

@@ -1,6 +1,6 @@
-package org.dotspace.validation;
+package org.dotspace.v1.validation;
 
-import org.dotspace.common.InterruptionConfigurable;
+import org.dotspace.v1.common.InterruptionConfigurable;
 
 public interface ValidationPolicy<T> extends InterruptionConfigurable<ValidationPolicy<T>> {
 

@@ -1,6 +1,6 @@
-package org.dotspace.validation.policy;
+package org.dotspace.v1.validation.policy;
 
-import org.dotspace.validation.ValidationPolicy;
+import org.dotspace.v1.validation.ValidationPolicy;
 
 public abstract class BaseValidationPolicy<T> implements ValidationPolicy<T> {
 

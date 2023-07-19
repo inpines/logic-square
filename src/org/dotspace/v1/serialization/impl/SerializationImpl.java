@@ -1,9 +1,9 @@
-package org.dotspace.serialization.impl;
+package org.dotspace.v1.serialization.impl;
 
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.dotspace.serialization.Serialization;
+import org.dotspace.v1.serialization.Serialization;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,6 +1,6 @@
-package org.dotspace.serialization;
+package org.dotspace.v1.serialization;
 
-import org.dotspace.creation.CreationBuilder;
+import org.dotspace.v1.creation.CreationBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

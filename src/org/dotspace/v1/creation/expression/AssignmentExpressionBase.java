@@ -1,9 +1,9 @@
-package org.dotspace.creation.expression;
+package org.dotspace.v1.creation.expression;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.dotspace.creation.AssignmentExpression;
+import org.dotspace.v1.creation.AssignmentExpression;
 
 public abstract class AssignmentExpressionBase<T, V> implements AssignmentExpression<T, V> {
 

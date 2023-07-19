@@ -1,10 +1,10 @@
-package org.dotspace.validation.policy;
+package org.dotspace.v1.validation.policy;
 
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-import org.dotspace.validation.ValidationsContext;
+import org.dotspace.v1.validation.ValidationsContext;
 
 public class SingularMemberValidationPolicy<T, I> extends BaseValidationPolicy<T> {
     

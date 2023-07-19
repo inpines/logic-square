@@ -1,4 +1,4 @@
-package org.dotspace.validation;
+package org.dotspace.v1.validation;
 
 public class ModelValidations {
 

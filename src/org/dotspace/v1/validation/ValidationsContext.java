@@ -1,4 +1,4 @@
-package org.dotspace.validation;
+package org.dotspace.v1.validation;
 
 import java.util.ArrayList;
 import java.util.HashMap;

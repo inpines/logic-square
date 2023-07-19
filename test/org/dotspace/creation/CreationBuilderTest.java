@@ -12,10 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.dotspace.creation.expression.Assignments;
-import org.dotspace.creation.expression.PluralMemberPath;
-import org.dotspace.creation.expression.SingularPath;
-import org.dotspace.creation.functional.Constructors;
+import org.dotspace.v1.creation.AdtAccessors;
+import org.dotspace.v1.creation.AssignmentPredicate;
+import org.dotspace.v1.creation.Creations;
+import org.dotspace.v1.creation.expression.Assignments;
+import org.dotspace.v1.creation.expression.PluralMemberPath;
+import org.dotspace.v1.creation.expression.SingularPath;
+import org.dotspace.v1.creation.functional.Constructors;
 import org.junit.Test;
 
 public class CreationBuilderTest {
