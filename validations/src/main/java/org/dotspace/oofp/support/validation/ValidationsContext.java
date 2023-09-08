@@ -10,7 +10,7 @@ public class ValidationsContext<T> {
     private T model;
     private boolean broken = false;
 
-    private List<ModelViolation> violations = new ArrayList<>();
+    private List<GeneralViolation> violations = new ArrayList<>();
     private Map<String, Object> assocations = new HashMap<>();
     
     public ValidationsContext(T model) {
@@ -25,7 +25,7 @@ public class ValidationsContext<T> {
         broken = true;
     }
 
-	public List<ModelViolation> getViolations() {
+	public List<GeneralViolation> getViolations() {
 		return violations;
     }
     
@@ -33,7 +33,7 @@ public class ValidationsContext<T> {
         return model;
     }
 
-    public void add(ModelViolation violation) {
+    public void add(GeneralViolation violation) {
         violations.add(violation);
     }
 

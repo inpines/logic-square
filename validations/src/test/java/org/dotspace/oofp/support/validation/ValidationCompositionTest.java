@@ -16,7 +16,7 @@ import org.dotspace.oofp.support.validation.policy.SingularMemberValidationPolic
 import org.dotspace.oofp.util.functional.Casters;
 import org.junit.Test;
 
-public class ModelValidationTest {
+public class ValidationCompositionTest {
 
     public class MyModel {
 
@@ -48,14 +48,14 @@ public class ModelValidationTest {
         				Arrays.asList("item name a", "item name c")))
             .build();
 
-        ValidationBuilder<MyModel> myValidator = GenenalValidations.<MyModel>compose()
+        ValidationBuilder<MyModel> myValidating = ValidationCompositions.<MyModel>composing()
             .adopt(SingularMemberValidationPolicy.select(MyModel::getName)
                 .with(this::validate1)
                 .dontInterruptOnFail())
             .adopt(PluralMemberValidationPolicy.each(MyModel::getItems)
                 .with(this::validate2));
 
-        List<ModelViolation> violations = myValidator
+        List<GeneralViolation> violations = myValidating
             .validate(model);
           
         assertNotNull(violations);
@@ -70,7 +70,7 @@ public class ModelValidationTest {
             ))
             .build();
 
-        violations = myValidator.validate(model);
+        violations = myValidating.validate(model);
 
         assertNotNull(violations);
         assertTrue(violations.size() == 2);
@@ -85,10 +85,10 @@ public class ModelValidationTest {
         .filter("my name"::equals)
         .map(nm -> true)
         .orElseGet(() -> {
-            ctx.add(GeneralBuilders.of(ModelViolation::new)
+            ctx.add(GeneralBuilders.of(GeneralViolation::new)
             .with(GeneralBuildingWriters.set(
-                ModelViolation::setValidationName, "validation1"))
-            .with(GeneralBuildingWriters.set(ModelViolation::setMessages, 
+                GeneralViolation::setValidationName, "validation1"))
+            .with(GeneralBuildingWriters.set(GeneralViolation::setMessages, 
             		Arrays.asList("name is not equals 'my name'")))
             .build());
             return false;
@@ -109,11 +109,11 @@ public class ModelValidationTest {
             i -> i.equals(itemName));
 
         if (!validated) {
-            ctx.add(GeneralBuilders.of(ModelViolation::new)
+            ctx.add(GeneralBuilders.of(GeneralViolation::new)
             .with(GeneralBuildingWriters.set(
-                ModelViolation::setValidationName, "validation2"))
+                GeneralViolation::setValidationName, "validation2"))
             .with(GeneralBuildingWriters.set(
-                ModelViolation::setMessages, Arrays.asList(String.format(
+                GeneralViolation::setMessages, Arrays.asList(String.format(
                         "item names is %s not in %s", itemName, 
                         validItemNames.toString()))))
             .build());

@@ -16,7 +16,7 @@ public class ValidationBuilder<T> {
 		return this;
 	}
 
-	public List<ModelViolation> validate(T model) {
+	public List<GeneralViolation> validate(T model) {
         ValidationsContext<T> ctx = new ValidationsContext<T>(model);
         for (ValidationPolicy<T> policy : policies) {
 			boolean validated = policy.validate(model, ctx);

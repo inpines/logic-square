@@ -3,7 +3,7 @@ package org.dotspace.oofp.support.validation;
 import java.util.List;
 import java.util.Map;
 
-public class ModelViolation {
+public class GeneralViolation {
 
     private String validationName;
 
