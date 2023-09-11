@@ -1,4 +1,4 @@
-package org.dotspace.oofp.support.common;
+package org.dotspace.oofp.support;
 
 public interface GeneralExpressionParsingFactory {
 

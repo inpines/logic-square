@@ -90,4 +90,12 @@ public class Casters {
 		};
 	}
 
+	public static <T> Function<Object, T> cast() {
+		return value -> {
+			@SuppressWarnings("unchecked")
+			T result = (T) value;
+			return result;
+		};
+	}
+
 }

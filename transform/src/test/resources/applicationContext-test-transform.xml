@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="functionalSupport" class="org.dotspace.oofp.util.functional.FunctionalSupport">
+		<property name="expressionEvaluations" ref="expressions" />
+		<property name="functors" ref="generalFunctors" />
+		<property name="predicates">
+			<map>
+				<entry key="isNotNull" value="isNotNull()" />
+				<entry key="allGt" value="all(gt(#options))" />
+				<entry key="anyGt" value="any(gt(#options))" />
+				<entry key="allMatchReading" value="allMatchReading(#options)" />
+				<entry key="equalsReading" value="equalsReading(#options)" />
+				<entry key="notEqualsReading" value="notEqualsReading(#options)" />	
+				<entry key="equalsReadingIn" value="equalsReadingIn(#options)" />	
+				<entry key="compareReading" value="compareReading(#options)" />
+			</map>
+		</property>
+		<property name="functions">
+			<map>
+				<entry key="toDateTime" value="toDateTime()" />
+			</map>
+		</property>
+		<property name="collectors">
+			<map>
+				<entry key="count" value="count()" />
+				<entry key="countToInteger" value="countToInteger()" /> 
+				<entry key="totalLong" value="@generalFunctors.totalLong()" />
+				<entry key="toList" value="toList()" />
+			</map>
+		</property>
+	</bean>
+	
+<!-- 	<bean id="spelExpressionParsingFactory"  -->
+<!-- 		class="com.mitac.common.support.spel.SpelExpressionParsingFactoryImpl" /> -->
+		
+	<bean id="expressions" class="org.dotspace.oofp.support.expression.ExpressionEvaluationsImpl" />
+	<bean id="generalFunctors" class="org.dotspace.oofp.util.functional.GeneralFunctors" />
+	
+	<bean id="transformations" class="org.dotspace.oofp.support.transform.Transformations">
+		<property name="expressionEvaluations" ref="expressions" />
+		<property name="functionalSupport" ref="functionalSupport" />
+	</bean>
+	
+	<bean id="taskExecutor" class="org.springframework.core.task.SyncTaskExecutor" />
+	
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+	
+	<bean id="testFunctors" class="org.dotspace.oofp.support.test.functional.TestFunctors" />
+	
+	<bean id="testFunctionalSupport" class="org.dotspace.oofp.util.functional.FunctionalSupport">
+		<property name="expressionEvaluations" ref="expressions" />
+		<property name="functors" ref="testFunctors" />
+		<property name="predicates">
+			<map />
+		</property>
+		<property name="functions">
+			<map />
+		</property>
+		<property name="collectors">
+			<map />
+		</property>
+	</bean>
+	
+	<bean id="conditionalities" class="org.dotspace.oofp.support.conditional.Conditionalities">
+		<property name="functionalSupport" ref="testFunctionalSupport" />
+		<property name="objectMapper" ref="objectMapper" />
+	</bean>
+	
+</beans>

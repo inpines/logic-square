@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
-	<bean id="expressions" class="org.dotspace.oofp.support.expression.ExpressionEvaluatorsImpl" />
+	<bean id="expressions" class="org.dotspace.oofp.support.expression.ExpressionEvaluationsImpl" />
 	<bean id="tokenizationFunctors" class="org.dotspace.oofp.support.tokenizer.TokenizationFunctors">
 		<property name="msgConverter" ref="msgConverter" />
 	</bean>

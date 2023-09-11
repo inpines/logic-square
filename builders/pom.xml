@@ -58,7 +58,12 @@
 	    <artifactId>poi-ooxml</artifactId>
 	    <version>5.2.3</version>
 	</dependency>
-	
+
+	<dependency>
+		<groupId>logic-square</groupId>
+		<artifactId>common</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
   </dependencies>
   
 </project>

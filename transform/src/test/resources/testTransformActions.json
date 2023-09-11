@@ -1,0 +1,12 @@
+[
+{"reader":"name", "writer":"setName(#value)"},
+{"reader":"age", "writer":"setAge(#value)"},
+{"reader":"localDatetime", "mappers":[{"type":"FUNCTION", "name":"toDateTime"}], 
+	"writer":"ldt"},
+{"reader":"amts", "collector":{"name":"countToInteger"}, "writer":"count"},
+{"reader":"amts", "collector":{"name":"totalLong"}, "writer":"total"},
+{"reader":"amts", "mappers":[{"type":"PREDICATE", "name":"anyGt", "options":"300L"}], 
+	"collector":{"name":"toList"}, "writer":"anyGeThreeAllAmts"},
+{"reader":"amts", "mappers":[{"type":"PREDICATE", "name":"allGt", "options":"300L"}],
+	"collector":{"name":"toList"}, "writer":"allGeThreeAllAmts"}
+]

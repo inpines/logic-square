@@ -4,9 +4,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
+import org.dotspace.oofp.support.ExpressionEvaluation;
 import org.dotspace.oofp.support.builder.GeneralBuilders;
 import org.dotspace.oofp.support.builder.writer.GeneralBuildingWriters;
-import org.dotspace.oofp.support.common.ExpressionEvaluation;
+import org.dotspace.oofp.util.functional.Casters;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.EvaluationContext;
@@ -24,16 +25,14 @@ public class ExpressionEvaluationImpl implements ExpressionEvaluation {
 			ApplicationContext applicationContext, String expressionText) {
 		this.applicationContext = applicationContext;
 		
-		this.expression = Optional.ofNullable(GeneralBuilders.of(this::newExpressionParser))
-				.map(bldr -> bldr.build())
-				.map(parser -> parser.parseExpression(expressionText))
+		this.expression = Optional.ofNullable(expressionText)
+				.map(expr -> {
+					SpelExpressionParser parser = new SpelExpressionParser();
+					return parser.parseExpression(expr);
+				})
 				.orElse(null);
 	}
 
-	private SpelExpressionParser newExpressionParser() {
-		return new SpelExpressionParser();
-	}
-	
 	@Override
 	public <T> T getValue(Class<T> resultClazz, Object root) {
 		EvaluationContext context = getContext(root, Collections.emptyMap());
@@ -69,8 +68,11 @@ public class ExpressionEvaluationImpl implements ExpressionEvaluation {
 	}
 
 	private <T> T evaluateValue(EvaluationContext context) {
-		@SuppressWarnings("unchecked")
-		T value = (T) (null != context ? expression.getValue(context) : expression.getValue());
+
+		T value = Optional.ofNullable(expression)
+				.map(e -> context != null ? e.getValue(context) : e.getValue())
+				.map(Casters.<T>cast())
+				.orElse(null);
 		
 		return value;
 	}

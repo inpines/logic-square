@@ -1,8 +1,8 @@
 package org.dotspace.oofp.support.tokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.dotspace.oofp.support.ExpressionEvaluations;
 import org.dotspace.oofp.support.MessageConverter;
-import org.dotspace.oofp.support.common.ExpressionEvaluations;
 import org.dotspace.oofp.util.Associable;
 
 import java.math.BigDecimal;
