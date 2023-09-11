@@ -4,9 +4,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.dotspace.oofp.support.builder.GeneralBuildingWriter;
-import org.dotspace.oofp.support.builder.GeneralBuildingWriters;
+import org.dotspace.oofp.support.builder.GeneralBuildingWriterOperator;
 
-public class SingularWriters<T, M, V> implements GeneralBuildingWriters<T, V> {
+public class SingularWriters<T, M, V> implements GeneralBuildingWriterOperator<T, V> {
 
 	private Function<T, M> getter;
 	private BiConsumer<M, V> setter;

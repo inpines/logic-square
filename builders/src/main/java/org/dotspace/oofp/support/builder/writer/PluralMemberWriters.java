@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.function.Function;
 
 import org.dotspace.oofp.support.builder.GeneralBuildingWriter;
-import org.dotspace.oofp.support.builder.GeneralBuildingWriters;
+import org.dotspace.oofp.support.builder.GeneralBuildingWriterOperator;
 
-public class PluralMemberWriters<T, I, D> implements GeneralBuildingWriters<T, Collection<D>> {
+public class PluralMemberWriters<T, I, D> implements GeneralBuildingWriterOperator<T, Collection<D>> {
 
 	private Function<T, Collection<I>> getter;
 	

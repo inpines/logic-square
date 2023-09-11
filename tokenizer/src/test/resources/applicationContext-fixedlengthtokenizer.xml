@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<bean id="expressions" class="org.dotspace.oofp.support.expression.ExpressionEvaluatorsImpl" />
+	<bean id="tokenizationFunctors" class="org.dotspace.oofp.support.tokenizer.TokenizationFunctors">
+		<property name="msgConverter" ref="msgConverter" />
+	</bean>
+	<bean id="msgConverter" class="org.dotspace.oofp.support.test.tokenizer.msgconverter.MessageConverterImpl" />
+	<bean id="fixedLengthTokenizers" class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizersImpl">
+		<property name="expressions" ref="expressions" />
+		<property name="functors" ref="tokenizationFunctors" />
+		<property name="tokenizationActionsMappers">
+			<map>
+				<entry key="role">
+					<util:map key-type="java.lang.Integer">
+						<entry>
+							<key><value>0</value></key>
+							<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationActions">
+								<constructor-arg><value>org.dotspace.oofp.support.test.tokenizer.Student</value></constructor-arg>
+								<constructor-arg>
+									<list>
+										<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationAction">
+											<property name="propertyPath" value="school" />
+											<property name="textLength" value="10" />
+											<property name="valueMapperExpression" value="getText()" />
+										</bean>
+									</list>
+								</constructor-arg>
+							</bean>
+						</entry> 
+						<entry>
+							<key><value>1</value></key>
+							<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationActions">
+								<constructor-arg><value>org.dotspace.oofp.support.test.tokenizer.Worker</value></constructor-arg>
+								<constructor-arg>
+									<list>
+										<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationAction">
+											<property name="propertyPath" value="job" />
+											<property name="textLength" value="15" />
+											<property name="valueMapperExpression" value="getText()" />
+										</bean>
+										<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationAction">
+											<property name="propertyPath" value="merried" />
+											<property name="textLength" value="1" />
+											<property name="valueMapperExpression" value="parseBoolean(#options)" />
+											<property name="optionsExpression" value="'''Y''.equals(#root.toUpperCase())'" />
+										</bean>
+									</list>
+								</constructor-arg>
+							</bean>
+						</entry> 
+					</util:map>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="tokenizertestAction" class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationActions">
+		<constructor-arg><value>org.dotspace.oofp.support.test.tokenizer.TokenizerTestInfo</value></constructor-arg>
+		<constructor-arg>
+			<list>
+				<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationAction">
+					<property name="propertyPath" value="name" />
+					<property name="textLength" value="10" />
+					<property name="valueMapperExpression" value="getText()" />
+				</bean>
+				<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationAction">
+					<property name="propertyPath" value="birthday" />
+					<property name="textLength" value="8" />
+					<property name="valueMapperExpression" value="parseDatetime(#options)" />
+					<property name="optionsExpression" value="'yyyyMMdd'" />
+				</bean>
+				<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationAction">
+					<property name="propertyPath" value="roleId" />
+					<property name="textLength" value="1" />
+					<property name="valueMapperExpression" value="parseIntValue()" />
+					<property name="tokenizationMapperName" value="role" />
+				</bean>
+				<bean class="org.dotspace.oofp.support.tokenizer.FixedLengthTokenizationAction">
+					<property name="propertyPath" value="age" />
+					<property name="textLength" value="3" />
+					<property name="valueMapperExpression" value="parseIntValue()" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+</beans>
