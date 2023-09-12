@@ -1,10 +1,22 @@
 # logic-square
-to develope some functional programming utilities to enhances OOAD approach
+to develope some functional programming utilities to enhances OOAD approach(oofp)
 
-## creation builder
+## genelal builders
 
-to build pojo or map, collection using expression
+to build pojo or map, collection using declarative programming
 
-## model validation
+## general validations
 
-to build validation form model
+to validate by simple validators of whose parameter is not only business model but also properties
+
+## expressions
+
+spel expression parser
+
+## tokenizer
+
+tokenizer file reader
+
+## transform
+
+transformations & conditional stream mappers
