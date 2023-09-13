@@ -18,6 +18,11 @@ import org.junit.Test;
 
 public class ValidationCompositionTest {
 
+    private static List<String> validItemNames = Arrays.asList(
+            "item name a", 
+            "item name b", 
+            "item name c");
+
     public class MyModel {
 
         private String name;
@@ -48,12 +53,14 @@ public class ValidationCompositionTest {
         				Arrays.asList("item name a", "item name c")))
             .build();
 
-        ValidationBuilder<MyModel> myValidating = ValidationCompositions.<MyModel>composing()
-            .adopt(SingularMemberValidationPolicy.select(MyModel::getName)
+        ValidationComposition<MyModel> myValidating = ValidationCompositions.<MyModel>composing()
+            .with(SingularMemberValidationPolicy.select(MyModel::getName)
                 .with(this::validate1)
+                .ofViolation(this::writeViolation1)
                 .dontInterruptOnFail())
-            .adopt(PluralMemberValidationPolicy.each(MyModel::getItems)
-                .with(this::validate2));
+            .with(PluralMemberValidationPolicy.each(MyModel::getItems)
+                .with(this::validate2)
+                .ofViolation(this::writeViolation2));
 
         List<GeneralViolation> violations = myValidating
             .validate(model);
@@ -73,53 +80,51 @@ public class ValidationCompositionTest {
         violations = myValidating.validate(model);
 
         assertNotNull(violations);
-        assertTrue(violations.size() == 2);
+        assertTrue(violations.size() == 3);
         assertEquals(violations.get(0).getValidationName(), "validation1");
         assertEquals(violations.get(1).getValidationName(), "validation2");
+        assertEquals(violations.get(2).getValidationName(), "validation2");
     }
 
     private boolean validate1(
-        String name, ValidationsContext<MyModel> ctx) {
+        String name) {
 
         boolean validated = Optional.ofNullable(name)
         .filter("my name"::equals)
         .map(nm -> true)
-        .orElseGet(() -> {
-            ctx.add(GeneralBuilders.of(GeneralViolation::new)
-            .with(GeneralBuildingWriters.set(
-                GeneralViolation::setValidationName, "validation1"))
-            .with(GeneralBuildingWriters.set(GeneralViolation::setMessages, 
-            		Arrays.asList("name is not equals 'my name'")))
-            .build());
-            return false;
-        });
+        .orElse(false);
 
         return validated;
     }
 
+    private void writeViolation1(String name, ValidationsContext<MyModel> ctx) {
+    	ctx.add(GeneralBuilders.of(GeneralViolation::new)
+                .with(GeneralBuildingWriters.set(
+                    GeneralViolation::setValidationName, "validation1"))
+                .with(GeneralBuildingWriters.set(GeneralViolation::setMessages, 
+                		Arrays.asList("name is not equals 'my name'")))
+                .build());
+    }
+    
     private boolean validate2(
-        String itemName, ValidationsContext<MyModel> ctx) {
-
-        List<String> validItemNames = Arrays.asList(
-            "item name a", 
-            "item name b", 
-            "item name c");
+        String itemName) {
 
         boolean validated = validItemNames.stream().anyMatch(
             i -> i.equals(itemName));
 
-        if (!validated) {
-            ctx.add(GeneralBuilders.of(GeneralViolation::new)
-            .with(GeneralBuildingWriters.set(
-                GeneralViolation::setValidationName, "validation2"))
-            .with(GeneralBuildingWriters.set(
-                GeneralViolation::setMessages, Arrays.asList(String.format(
-                        "item names is %s not in %s", itemName, 
-                        validItemNames.toString()))))
-            .build());
-        }
-
         return validated;
     }
-    
+ 
+    private void writeViolation2(
+            String itemName, ValidationsContext<MyModel> ctx) {
+        
+        ctx.add(GeneralBuilders.of(GeneralViolation::new)
+        .with(GeneralBuildingWriters.set(
+            GeneralViolation::setValidationName, "validation2"))
+        .with(GeneralBuildingWriters.set(
+            GeneralViolation::setMessages, Arrays.asList(String.format(
+                    "item names is %s not in %s", itemName, 
+                    validItemNames.toString()))))
+        .build());
+    }
 }

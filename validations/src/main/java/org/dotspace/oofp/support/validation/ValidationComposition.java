@@ -3,15 +3,15 @@ package org.dotspace.oofp.support.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValidationBuilder<T> {
+public class ValidationComposition<T> {
 
     // private Class<T> clazz;
     private List<ValidationPolicy<T>> policies = new ArrayList<>();
     
-	public <U> ValidationBuilder() {
+	public <U> ValidationComposition() {
 	}
 
-	public ValidationBuilder<T> adopt(ValidationPolicy<T> policy) {
+	public ValidationComposition<T> with(ValidationPolicy<T> policy) {
         policies.add(policy);
 		return this;
 	}
