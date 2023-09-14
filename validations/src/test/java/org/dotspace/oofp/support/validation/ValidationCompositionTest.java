@@ -55,12 +55,12 @@ public class ValidationCompositionTest {
 
         ValidationComposition<MyModel> myValidating = ValidationCompositions.<MyModel>composing()
             .with(SingularMemberValidationPolicy.select(MyModel::getName)
-                .with(this::validate1)
-                .ofViolation(this::writeViolation1)
+                .filter(this::validate1)
+                .orElse(this::writeViolation1)
                 .dontInterruptOnFail())
             .with(PluralMemberValidationPolicy.each(MyModel::getItems)
-                .with(this::validate2)
-                .ofViolation(this::writeViolation2));
+                .filter(this::validate2)
+                .orElse(this::writeViolation2));
 
         List<GeneralViolation> violations = myValidating
             .validate(model);
@@ -82,8 +82,8 @@ public class ValidationCompositionTest {
         assertNotNull(violations);
         assertTrue(violations.size() == 3);
         assertEquals(violations.get(0).getValidationName(), "validation1");
-        assertEquals(violations.get(1).getValidationName(), "validation2");
-        assertEquals(violations.get(2).getValidationName(), "validation2");
+        assertEquals(violations.get(1).getValidationName(), "validation2.1");
+        assertEquals(violations.get(2).getValidationName(), "validation2.2");
     }
 
     private boolean validate1(
@@ -97,7 +97,7 @@ public class ValidationCompositionTest {
         return validated;
     }
 
-    private void writeViolation1(String name, ValidationsContext<MyModel> ctx) {
+    private void writeViolation1(String name, ValidationContext<MyModel> ctx) {
     	ctx.add(GeneralBuilders.of(GeneralViolation::new)
                 .with(GeneralBuildingWriters.set(
                     GeneralViolation::setValidationName, "validation1"))
@@ -116,11 +116,13 @@ public class ValidationCompositionTest {
     }
  
     private void writeViolation2(
-            String itemName, ValidationsContext<MyModel> ctx) {
+            String itemName, ValidationContext<MyModel> ctx) {
         
+    	long n = ctx.getViolationsCount("validation2\\.\\d+$") + 1;
+    	
         ctx.add(GeneralBuilders.of(GeneralViolation::new)
         .with(GeneralBuildingWriters.set(
-            GeneralViolation::setValidationName, "validation2"))
+            GeneralViolation::setValidationName, String.format("validation2.%d", n)))
         .with(GeneralBuildingWriters.set(
             GeneralViolation::setMessages, Arrays.asList(String.format(
                     "item names is %s not in %s", itemName, 

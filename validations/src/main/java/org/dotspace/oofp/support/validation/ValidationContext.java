@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class ValidationsContext<T> {
+public class ValidationContext<T> {
 
     private T model;
     private boolean broken = false;
@@ -13,7 +15,7 @@ public class ValidationsContext<T> {
     private List<GeneralViolation> violations = new ArrayList<>();
     private Map<String, Object> assocations = new HashMap<>();
     
-    public ValidationsContext(T model) {
+    public ValidationContext(T model) {
         this.model = model;
     }
 
@@ -41,4 +43,17 @@ public class ValidationsContext<T> {
         return assocations;
     }
 
+    public long getViolationsCount(String nameRegex) {
+    	return violations.stream()
+    			.filter(vltn -> {
+    				Pattern p = Pattern.compile(nameRegex);
+    				Matcher m = p.matcher(vltn.getValidationName());
+    				if (m.matches()) {
+    					return true;
+    				}
+    				return false;
+    			})
+    			.count();
+    }
+    
 }

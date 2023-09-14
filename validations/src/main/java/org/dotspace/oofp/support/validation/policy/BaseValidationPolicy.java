@@ -16,5 +16,5 @@ public abstract class BaseValidationPolicy<T> implements ValidationPolicy<T> {
         this.brokenOnFali = false;
         return this;
     }
-
+    
 }

@@ -17,7 +17,7 @@ public class ValidationComposition<T> {
 	}
 
 	public List<GeneralViolation> validate(T model) {
-        ValidationsContext<T> ctx = new ValidationsContext<T>(model);
+        ValidationContext<T> ctx = new ValidationContext<T>(model);
         for (ValidationPolicy<T> policy : policies) {
 			boolean validated = policy.validate(model, ctx);
 			
