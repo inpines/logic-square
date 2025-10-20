@@ -63,7 +63,7 @@ public class Transitions {
 
     public Transitions merge(
             Transitions other, TransitionOptions options,
-            Function<String, RuntimeException> exceptionSupplier) {
+            Function<String, RuntimeException> exceptionGenerator) {
         Map<String, TransformMapping> merged = new LinkedHashMap<>();
         for (TransformMapping m : this.mappings) {
             merged.put(m.writerExpr(), m);
@@ -71,7 +71,7 @@ public class Transitions {
         for (TransformMapping m : other.mappings) {
             boolean hasConflict = merged.containsKey(m.writerExpr());
             if (hasConflict && !options.isOverwriting()) {
-                throw exceptionSupplier.apply(String.format("Duplicate readerExpr: %s", m.writerExpr()));
+                throw exceptionGenerator.apply(String.format("Duplicate readerExpr: %s", m.writerExpr()));
             }
             merged.put(m.writerExpr(), m); // 覆蓋或新增
         }
