@@ -1,4 +1,4 @@
-package org.dotspace.oofp.support.dsl;
+package org.dotspace.oofp.utils.dsl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -8,8 +8,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.UnaryOperator;
 
-import org.dotspace.oofp.utils.dsl.BehaviorStep;
-import org.dotspace.oofp.utils.dsl.StepContext;
 import org.dotspace.oofp.utils.functional.monad.validation.Validation;
 import org.dotspace.oofp.utils.violation.joinable.Violations;
 import org.junit.jupiter.api.DisplayName;

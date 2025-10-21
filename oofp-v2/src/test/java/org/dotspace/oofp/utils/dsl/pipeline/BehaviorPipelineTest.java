@@ -1,6 +1,6 @@
-package org.dotspace.oofp.support.dsl.pipeline;
+package org.dotspace.oofp.utils.dsl.pipeline;
 
-import org.dotspace.oofp.support.dsl.BehaviorPipeline;
+import org.dotspace.oofp.utils.dsl.BehaviorPipeline;
 import org.dotspace.oofp.utils.builder.GeneralBuilders;
 import org.dotspace.oofp.utils.builder.GeneralBuildingWriters;
 import org.dotspace.oofp.utils.dsl.BehaviorStep;

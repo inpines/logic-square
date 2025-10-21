@@ -1,9 +1,7 @@
-package org.dotspace.oofp.support.dsl;
+package org.dotspace.oofp.utils.dsl;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.dotspace.oofp.utils.dsl.BehaviorStep;
-import org.dotspace.oofp.utils.dsl.StepContext;
 import org.dotspace.oofp.utils.functional.monad.validation.Validation;
 import org.dotspace.oofp.utils.violation.joinable.Violations;
 
