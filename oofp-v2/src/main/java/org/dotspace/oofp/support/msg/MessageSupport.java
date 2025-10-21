@@ -5,7 +5,6 @@ import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.dotspace.oofp.support.expression.ExpressionEvaluations;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Component
 public class MessageSupport {
 
     public static final String NULL = "<null>";

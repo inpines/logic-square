@@ -9,7 +9,6 @@ import org.dotspace.oofp.utils.dsl.StepContext;
 import org.dotspace.oofp.utils.functional.monad.Maybe;
 import org.dotspace.oofp.utils.functional.monad.validation.Validation;
 import org.dotspace.oofp.utils.violation.joinable.Violations;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Optional;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
-@Component("expressionEvaluators")
 @Slf4j
 public class ExpressionEvaluators {
 
@@ -30,6 +28,8 @@ public class ExpressionEvaluators {
     private static final Pattern VAR_PATTERN = Pattern.compile("#(\\w+)");
 
     private ExpressionEvaluations expressionEvaluations;
+
+    private ExpressionExceptions expressionExceptions;
 
     public <T, R> Function<T, R> readerOf(String expression) {
         return t -> maybeParse(expression)
@@ -138,7 +138,8 @@ public class ExpressionEvaluators {
                                 eval.setValue(variables, t, v);
                             }
                         }, () -> {
-                            throw new RuntimeException("寫入表達式有誤: 無法解析表達式");
+                            throw expressionExceptions.generateGeneralException(
+                                    "無法依表達式寫入內容: 表達式為空值而無法解析");
                         });
             } catch (Exception e) {
                 exceptionHandler.accept(e);

@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.dotspace.oofp.support.expression.ExpressionEvaluations;
 import org.dotspace.oofp.support.msg.MessageSupport;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Component
 public class SequenceGenerations {
 
 	private final ExpressionEvaluations expressionEvaluations;

@@ -2,7 +2,6 @@ package org.dotspace.oofp.support.msg;
 
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
  * 這個類別提供了將欄位值進行遮蔽的功能，特別是針對結合欄位解析與遮蔽的處理。
  * </p>
  */
-@Component
 @AllArgsConstructor
 public class FieldValueObfuscations {
 
