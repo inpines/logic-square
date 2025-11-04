@@ -6,6 +6,7 @@ import org.dotspace.oofp.utils.functional.monad.Maybe;
 import org.dotspace.oofp.utils.functional.monad.validation.Validation;
 import org.dotspace.oofp.utils.violation.joinable.Violations;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +27,22 @@ public class NioFileUtils {
         return Maybe.given(filename)
                 .map(fn -> resolveFilePath(fn, pathValidation))
                 .orElse(pathValidation);
+    }
+
+    public Validation<Violations, File> validateFile(String baseFolder, String subPath, String filename) {
+        return resolvePath(baseFolder, subPath, filename)
+                .flatMap(path -> {
+                    try {
+                        if (!Files.exists(path) || !Files.isRegularFile(path)) {
+                            return Validation.invalid(Violations.violate("file validation",
+                                    String.format("File does not exist or is not a regular file: %s", path)));
+                        }
+                        return Validation.valid(path.toFile());
+                    } catch (Exception e) {
+                        return Validation.invalid(Violations.violate("file validation",
+                                String.format("Failed to validate file: %s => throws %s", path, e)));
+                    }
+                });
     }
 
     public Validation<Violations, Path> validatePath(Path folderPath) {

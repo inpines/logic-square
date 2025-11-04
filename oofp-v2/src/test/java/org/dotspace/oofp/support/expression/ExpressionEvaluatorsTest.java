@@ -39,7 +39,12 @@ class ExpressionEvaluatorsTest {
 
     @BeforeEach
     void setUp() {
-        expressionEvaluators = new ExpressionEvaluators(expressionEvaluations);
+        expressionEvaluators = new ExpressionEvaluators(expressionEvaluations, new ExpressionExceptions() {
+            @Override
+            public RuntimeException generateGeneralException(String message) {
+                return new RuntimeException(message);
+            }
+        });
     }
 
     @Test
