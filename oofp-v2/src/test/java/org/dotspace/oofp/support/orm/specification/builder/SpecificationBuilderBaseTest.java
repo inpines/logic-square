@@ -7,12 +7,13 @@ import org.dotspace.oofp.support.orm.specification.SpecificationBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class SpecificationBuilderBaseTest {
 
     @Mock
@@ -63,7 +65,6 @@ class SpecificationBuilderBaseTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         specificationBuilder = new TestSpecificationBuilder();
     }
 

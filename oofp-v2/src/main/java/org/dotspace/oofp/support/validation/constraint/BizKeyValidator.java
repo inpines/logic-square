@@ -1,6 +1,5 @@
 package org.dotspace.oofp.support.validation.constraint;
 
-import gov.acs.support.validation.annotation.BizKeyField;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -8,6 +7,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.dotspace.oofp.support.expression.ExpressionEvaluations;
 import org.dotspace.oofp.support.validation.annotation.BizKey;
+import org.dotspace.oofp.support.validation.annotation.BizKeyField;
 import org.dotspace.oofp.utils.Reflections;
 import org.dotspace.oofp.utils.builder.GeneralBuilders;
 import org.dotspace.oofp.utils.builder.GeneralBuildingWriters;

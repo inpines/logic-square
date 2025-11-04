@@ -10,8 +10,9 @@ import org.dotspace.oofp.support.orm.specification.selectable.SelectionsProjecti
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class SelectionsBuilderTest {
 
     @Mock
@@ -50,7 +52,6 @@ class SelectionsBuilderTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         selectionsBuilder = new SelectionsBuilder<>();
     }
 
