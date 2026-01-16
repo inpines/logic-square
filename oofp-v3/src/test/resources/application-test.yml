@@ -1,0 +1,141 @@
+#spring:
+#  profiles:
+#    active: test
+
+spring:
+  main:
+    banner-mode: "off"
+
+logging:
+  level:
+    org.springframework.boot.context.properties: DEBUG  # 启用属性绑定的调试日志
+    org.springframework.context: DEBUG
+
+jwt:
+  key-store-name: jwt
+  expiration: 86400000 # 24 hours in milliseconds
+
+acs-path-root:
+  api-log-path: d:/etc/acs/api/logs
+  api-data-path: d:/etc/acs/api/data
+  var-lib-path: d:/etc/acs/var/moda/acs/lib/csp
+
+sequence:
+  sequence-path: sequence
+
+code:
+  code-path: code
+  context:
+    traits:
+      AMS_001:
+        module-type: AMS
+        data-type: AMS_001
+        code-description: 機關代碼類別
+        items:
+          '1': OID
+          '2': 統一編號
+          '3': 無機關代碼
+      AMS_002:
+        module-type: AMS
+        data-type: AMS_002
+        code-description: 資通安全責任等級
+        items:
+          A: A級
+          B: B級
+          C: C級
+          D: D級
+          E: E級
+
+transformations:
+  transitions-path: 'transform'
+  context:
+    transitions:
+      T001:
+        - reader: 'name'
+          writer: 'setName(#value)'
+        - reader: 'age'
+          writer: 'setAge(#value)'
+        - reader: 'localDatetime'
+          mappers:
+            - type: 'MAP'
+              expression: '@functionSupport.toDateTime()'
+          writer: 'ldt'
+        - reader: 'amts'
+          collectorExpression: '@collectorSupport.countToInteger()'
+          writer: 'count'
+        - reader: 'amts'
+          collectorExpression: '@collectorSupport.totalLong()'
+          writer: 'total'
+        - reader: 'amts'
+          mappers:
+            - type: 'PREDICATE'
+              expression: '@predicateSupport.any(@predicateSupport.gt(300L))'
+          collectorExpression: '@collectorSupport.toList()'
+          writer: 'anyGeThreeAllAmts'
+        - reader: 'amts'
+          mappers:
+            - type: 'PREDICATE'
+              expression: '@predicateSupport.all(@predicateSupport.gt(300L))'
+          collectorExpression: '@collectorSupport.toList()'
+          writer: 'allGeThreeAllAmts'
+
+ks-config:
+  key-store-location: 'keystore'
+  key-store-options:
+    gms-jwt-uat:
+      key-store-credentials: "sS4TRU/2U/rI4EyHmB7xyGwTfc/+04G7AnoCdhUfDIqKHGt7W2aLdX8YzGj4sOfWKnPcjy2/nqNLOAF/ROw="
+      key-store-parent-path: gms
+      key-store-filename: "jwt-uat.p12"
+    gms-jwt:
+      key-store-credentials: "sS4TRU/2U/rI4EyHmB7xyGwTfc/+04G7AnoCdhUfDIqKHGt7W2aLdX8YzGj4sOfWKnPcjy2/nqNLOAF/ROw="
+      key-store-parent-path: gms
+      key-store-filename: "jwt-prd.p12"
+    jwt-prd:
+      key-store-credentials: 'sS4TRU/2U/rI4EyHmB7xyGwTfc/+04G7AnoCdhUfDIqKHGt7W2aLdX8YzGj4sOfWKnPcjy2/nqNLOAF/ROw='
+      key-store-parent-path: csp
+      key-store-filename: 'jwt-prd.p12'
+    jwt:
+      key-store-credentials: 'sS4TRU/2U/rI4EyHmB7xyGwTfc/+04G7AnoCdhUfDIqKHGt7W2aLdX8YzGj4sOfWKnPcjy2/nqNLOAF/ROw='
+      key-store-parent-path: csp
+      key-store-filename: 'jwt.jks'
+    sim1:
+      key-store-credentials: '3U9dv8GDcsTHbAMU3E4RYGOh6/zqD3c0XApWCT/SQ9h4ZRXgW30N+OY+0LIvTdfIMTTv1QGFtjyDPchxyto='
+      key-store-filename: 'sim1.jks'
+    sim2:
+      key-store-credentials: '3j0BjfIxJzTJjt/9pRHBvhR2jBAHiJQI+po5Yueo+9E41zJkPnBsch/ietrIIoJIqJci1c8r7CgQSc6lSvQ='
+      key-store-filename: 'sim2.jks'
+    tv:
+      key-store-credentials: '+zQSzC4ZQwRQ+ZBfQXqqQMnZuumywRwd1z5BtKCGb9cNqVf+vv8t3tvXpWFH1iJ3sKnTiftz9ThZJi6IDpE='
+      key-store-filename: 'tv.jks'
+    hash:
+      key-store-credentials: 'ItbFfsjUYQoQU8kVDZlgRfvPieyYgnar8CJxracxhyOLxyNdtrcCGzE+cvpgdi4JcicmWxxKD2k5xClMfNg='
+      key-store-filename: 'hash.jks'
+      entry-names:
+        - secret-key-entry
+
+hash:
+  keyStoreName: hash
+
+sms:
+  url-root: 'https://111.gov.tw/psms_web/api'
+  api-username: 'MODAACSAA01'
+  api-credentials: 'aUixIBdhOi0/YtpwJQhij+jtaRl48TikjkZP91X/04izwBWG4hxYX6Ixt3gPFTMMZGmqWycTJBB+' # 'VyaXg98413TIDbgOtq44EQ=='
+
+redis:
+  enabled: true
+  address: localhost
+  port: 6379
+  credentials: 'G4W0A6/QeW2dGBSfwbogsUHUpCMmszAOttxO25g1b0qiIgT0cJudy9tT2H2xK6tTDAkmBc0sCqkAXhcpIUiGM2PZIYIHtiNpQwcviw=='
+
+security:
+  sys-id: csp
+  env-pbkdf2-credentials-hash: MqV1xaMX4Ntc-Q9Bn4TmFjqYuIZm7oVeByrKj4oGhW4
+
+app:
+  cors:
+    api-origins: http://localhost/
+    session-origins: http://localhost/
+  auth:
+    path:
+      request-matchers:
+        - /api/ams/**
