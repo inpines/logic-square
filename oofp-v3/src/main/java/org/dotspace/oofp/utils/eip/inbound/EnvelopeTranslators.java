@@ -1,11 +1,11 @@
 package org.dotspace.oofp.utils.eip.inbound;
 
+import lombok.experimental.UtilityClass;
+import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
+import org.dotspace.oofp.model.dto.behaviorstep.Violations;
 import org.dotspace.oofp.model.dto.eip.InboundAttrKeys;
 import org.dotspace.oofp.model.dto.eip.InboundEnvelope;
-import org.dotspace.oofp.model.dto.behaviorstep.Violations;
-import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
 import org.dotspace.oofp.utils.functional.monad.validation.Validation;
-import lombok.experimental.UtilityClass;
 
 import java.util.function.Function;
 
@@ -33,7 +33,7 @@ public class EnvelopeTranslators {
             var normalized = InboundMetaNormalizer.normalize(env.meta(), schema);
             vio = vio.join(normalized.violations());
 
-            // 3) 建 StepContext（你不希望 setAttribute，就用 withAttribute chain）
+            // 3) 建 StepContext（不希望 setAttribute，就用 withAttribute chain）
             StepContext<R> sc = StepContext.<R>builder()
                     .withPayload(env.payload())
                     .build()

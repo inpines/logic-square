@@ -2,9 +2,9 @@ package org.dotspace.oofp.model.dto.eip;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import org.dotspace.oofp.utils.eip.AttrKey;
-
 import lombok.experimental.UtilityClass;
+import org.dotspace.oofp.model.dto.auth.AuthContext;
+import org.dotspace.oofp.utils.eip.AttrKey;
 
 import java.util.List;
 import java.util.Map;
@@ -52,4 +52,8 @@ public final class InboundAttrKeys {
 
     public static final AttrKey<ControlDecision> NEXT_DECISION = AttrKey.of(
             "inbound.message.control.next-decision", new TypeReference<>() {});
+
+    public static final AttrKey<AuthContext> AUTH_CONTEXT = AttrKey.of(
+            "inbound.auth.context", new TypeReference<>() {});
+
 }
