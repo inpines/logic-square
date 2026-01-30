@@ -1,13 +1,13 @@
 package org.dotspace.oofp.utils.eip.step;
 
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 import org.dotspace.oofp.model.dto.auth.AuthContext;
 import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
 import org.dotspace.oofp.model.dto.behaviorstep.Violations;
 import org.dotspace.oofp.model.dto.eip.InboundAttrKeys;
 import org.dotspace.oofp.utils.dsl.BehaviorStep;
 import org.dotspace.oofp.utils.functional.monad.validation.Validation;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
 import java.util.Set;
 import java.util.stream.Collectors;

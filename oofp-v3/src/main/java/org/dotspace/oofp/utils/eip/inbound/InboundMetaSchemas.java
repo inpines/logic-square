@@ -1,5 +1,6 @@
 package org.dotspace.oofp.utils.eip.inbound;
 
+import org.dotspace.oofp.model.dto.eip.InboundMetaHeaders;
 import org.dotspace.oofp.model.dto.eip.InboundMetaKeys;
 
 import lombok.experimental.UtilityClass;
@@ -14,9 +15,9 @@ public class InboundMetaSchemas {
         return new InboundMetaSchema() {
             @Override public Map<String, String> renames() {
                 return Map.of(
-                        "X-Request-Id", InboundMetaKeys.REQUEST_ID,
-                        "User-Agent", InboundMetaKeys.USER_AGENT,
-                        "X-Forwarded-For", InboundMetaKeys.SOURCE_IP
+                        InboundMetaHeaders.REQUEST_ID, InboundMetaKeys.REQUEST_ID,
+                        InboundMetaHeaders.USER_AGENT, InboundMetaKeys.USER_AGENT,
+                        InboundMetaHeaders.FORWARDED_FOR, InboundMetaKeys.SOURCE_IP
                 );
             }
 

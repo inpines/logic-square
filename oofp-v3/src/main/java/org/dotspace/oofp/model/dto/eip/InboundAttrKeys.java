@@ -2,9 +2,10 @@ package org.dotspace.oofp.model.dto.eip;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import lombok.experimental.UtilityClass;
 import org.dotspace.oofp.model.dto.auth.AuthContext;
 import org.dotspace.oofp.utils.eip.AttrKey;
+
+import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public final class InboundAttrKeys {
     public static final AttrKey<MessageClaims> CLAIMS = AttrKey.of(
             "inbound.message.claims", new TypeReference<>() {});
 
-    public static final AttrKey<QuerySpec> QUERY_SPEC = AttrKey.of(
+    public static final AttrKey<List<QuerySpec>> QUERY_SPEC_LIST = AttrKey.of(
             "interchange.query", new TypeReference<>() {});
 
     public static final AttrKey<MessageStatus> STATUS = AttrKey.of(

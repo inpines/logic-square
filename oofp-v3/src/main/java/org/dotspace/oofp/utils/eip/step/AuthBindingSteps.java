@@ -1,17 +1,18 @@
 package org.dotspace.oofp.utils.eip.step;
 
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 import org.dotspace.oofp.model.dto.auth.AuthContext;
-import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
-import org.dotspace.oofp.model.dto.behaviorstep.Violations;
 import org.dotspace.oofp.model.dto.eip.InboundAttrKeys;
 import org.dotspace.oofp.model.dto.eip.MessageClaims;
 import org.dotspace.oofp.utils.dsl.BehaviorStep;
+import org.dotspace.oofp.model.dto.behaviorstep.Violations;
+import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
 import org.dotspace.oofp.utils.eip.auth.AuthContexts;
+import org.dotspace.oofp.utils.eip.auth.EntitlementsResolver;
 import org.dotspace.oofp.utils.functional.Extractor;
 import org.dotspace.oofp.utils.functional.monad.Maybe;
 import org.dotspace.oofp.utils.functional.monad.validation.Validation;
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -98,18 +99,10 @@ public class AuthBindingSteps {
                         .map(ac -> stepContext.withAttribute(InboundAttrKeys.AUTH_CONTEXT, ac));
     }
 
-    public static final String AUTHORIZATION_RESOLVE_FAILED_VIO = "authorization.resolve.failed";
-    public static final String AUTHORIZATION_UNAUTHORIZED_VIO = "authorization.unauthorized";
+    public static final String AUTH_BINDING_RESOLVE_FAILED_VIO = "auth-binding.resolve.failed";
+    public static final String AUTH_BINDING_UNAUTHORIZED_VIO = "auth-binding.unauthorized";
 
-    // 用於解析使用者權限的介面
-    @FunctionalInterface
-    public interface EntitlementsResolver {
-        // 回傳使用者的角色、角色群組與權限
-        record Entitlements(Set<String> roles, Set<String> roleGroups, Set<String> authorities) {}
-
-        // 根據 principalId 解析出 Entitlements
-        Validation<Violations, Entitlements> resolve(String principalId);
-    }
+    record Entitlements(Set<String> roles, Set<String> roleGroups, Set<String> authorities) {}
 
     // 根據 AuthContext 的 principalId 解析並豐富使用者權限資訊
     public <T> BehaviorStep<T> resolveEntitlements(
@@ -136,7 +129,7 @@ public class AuthBindingSteps {
                                                     InboundAttrKeys.AUTH_CONTEXT, enriched));
                         } catch (Exception ex) {
                             return Validation.<Violations, StepContext<T>>invalid(Violations.violate(
-                                    AUTHORIZATION_RESOLVE_FAILED_VIO, "Entitlements resolve failed: "
+                                    AUTH_BINDING_RESOLVE_FAILED_VIO, "Entitlements resolve failed: "
                                             + ex.getClass().getSimpleName()
                                             + Maybe.given(ex.getMessage())
                                             .map(msg -> ", message=" + msg)
@@ -151,7 +144,7 @@ public class AuthBindingSteps {
                             authCondition.isOptional(stepContext)
                                     ? Validation.valid(stepContext)
                                     : Validation.invalid(Violations.violate(
-                                    AUTHORIZATION_UNAUTHORIZED_VIO,
+                                    AUTH_BINDING_UNAUTHORIZED_VIO,
                                     "Unauthorized principal:" + principal
                             ))
                     );

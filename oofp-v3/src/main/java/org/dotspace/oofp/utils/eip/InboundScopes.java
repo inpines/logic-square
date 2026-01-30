@@ -1,7 +1,7 @@
 package org.dotspace.oofp.utils.eip;
 
-import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
 import org.dotspace.oofp.model.dto.eip.*;
+import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
 import org.dotspace.oofp.utils.functional.monad.Maybe;
 import lombok.experimental.UtilityClass;
 

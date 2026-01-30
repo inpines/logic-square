@@ -84,9 +84,15 @@ public class StepContext<T> {
         return getAttribute(name)
                 .map(applier);
     }
+
     public <R> Maybe<R> getAttribute(String name) {
         return getAttributeRaw(name)
                 .map(Casters.cast());
+    }
+
+    public <R> Maybe<R> findAttribute(AttrKey<R> attrKey) {
+        return getAttributeRaw(attrKey.name())
+                .map(Casters.cast(attrKey.typeRef()));
     }
 
     public <R> Maybe<R> getAttribute(String name, Class<R> clazz) {

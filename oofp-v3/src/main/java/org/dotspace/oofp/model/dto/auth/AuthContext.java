@@ -1,12 +1,12 @@
 package org.dotspace.oofp.model.dto.auth;
 
-import lombok.Builder;
-import lombok.Getter;
+import org.dotspace.oofp.utils.builder.GeneralBuilders;
+import org.dotspace.oofp.utils.builder.operation.WriteOperations;
+import lombok.Data;
 
 import java.util.Set;
 
-@Getter
-@Builder
+@Data
 public class AuthContext {
     String principalId;
     String tenantId; // optional
@@ -17,11 +17,11 @@ public class AuthContext {
     String tokenId; // jti, optional
 
     public static AuthContext anonymous() {
-        return AuthContext.builder()
-                .principalId("anonymous")
-                .roles(Set.of())
-                .roleGroups(Set.of())
-                .authorities(Set.of())
+        return GeneralBuilders.supply(AuthContext::new)
+                .with(WriteOperations.set(AuthContext::setPrincipalId, "anonymous"))
+                .with(WriteOperations.set(AuthContext::setRoles, Set.of()))
+                .with(WriteOperations.set(AuthContext::setRoleGroups, Set.of()))
+                .with(WriteOperations.set(AuthContext::setAuthorities, Set.of()))
                 .build();
     }
 }

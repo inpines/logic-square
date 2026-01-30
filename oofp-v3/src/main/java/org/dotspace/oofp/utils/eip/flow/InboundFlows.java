@@ -15,7 +15,6 @@ import lombok.experimental.UtilityClass;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 @UtilityClass
 public class InboundFlows {
@@ -65,7 +64,7 @@ public class InboundFlows {
             case HTTP -> InboundMetaSchemas.http();
             case MQ -> InboundMetaSchemas.mq();
             case MQTT -> InboundMetaSchemas.mqtt();
-            case FILE, SCHEDULED, OTHER -> InboundMetaSchemas.empty();
+            case FILE, SCHEDULED, OTHER, EMPTY_HTTP_CONTEXT -> InboundMetaSchemas.empty();
         };
     }
 
@@ -85,10 +84,7 @@ public class InboundFlows {
     }
 
     private <T> List<BehaviorStep<T>> listChains(StatefulGate<T> statefulGate) {
-        return Stream.of(statefulGate.claimsBinder(),
-                        statefulGate.querySpecBinder(),
-                        statefulGate.statusObserver(),
-                        statefulGate.decider())
+        return statefulGate.steps().stream()
                 .filter(Objects::nonNull)
                 .toList();
     }

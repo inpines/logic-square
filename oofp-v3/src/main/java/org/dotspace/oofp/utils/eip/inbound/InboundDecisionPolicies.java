@@ -33,6 +33,7 @@ public class InboundDecisionPolicies {
         var effectiveFailures = isAuthOptional
                 ? failures.stream()
                 .filter(f -> f.taxonomy() != ErrorTaxonomy.UNAUTHORIZED)
+                .filter(f -> !isAuthOptionalIgnorableCode(f.code()))
                 .toList()
                 : failures;
 
@@ -45,13 +46,13 @@ public class InboundDecisionPolicies {
             return new ControlDecision.Noop("idempotency/conflict");
         }
 
-        if (hasTaxonomy(effectiveFailures, ErrorTaxonomy.VALIDATION)
-                || hasTaxonomy(effectiveFailures, ErrorTaxonomy.UNAUTHORIZED)) {
+        if (hasTaxonomy(effectiveFailures, ErrorTaxonomy.TRANSIENT_DEPENDENCY) ||
+                hasTaxonomy(effectiveFailures, ErrorTaxonomy.VALIDATION) ||
+                hasTaxonomy(effectiveFailures, ErrorTaxonomy.UNAUTHORIZED)) {
             return new ControlDecision.Dlq(joinCodes(effectiveFailures));
         }
 
-        if (hasTaxonomy(effectiveFailures, ErrorTaxonomy.TRANSIENT_DEPENDENCY)
-                || hasTaxonomy(effectiveFailures, ErrorTaxonomy.NOT_FOUND)) {
+        if (hasTaxonomy(effectiveFailures, ErrorTaxonomy.NOT_FOUND)) {
 
             int attempt = Math.max(0, in.getCurrentStatus().attempt());
             if (attempt >= maxAttempts) {
@@ -66,6 +67,11 @@ public class InboundDecisionPolicies {
         return new ControlDecision.FailInternal(joinCodes(effectiveFailures), first.cause());
     }
 
+    private boolean isAuthOptionalIgnorableCode(String code) {
+        return "authorization.denied".equals(code)
+                || "auth.ctx.missing".equals(code); // 你想允許匿名的話
+    }
+
     private boolean hasTaxonomy(java.util.List<Failure> failures, ErrorTaxonomy tax) {
         return failures.stream().anyMatch(f -> f.taxonomy() == tax);
     }
@@ -78,7 +84,7 @@ public class InboundDecisionPolicies {
                 .orElse("unknown");
     }
 
-    private java.time.Duration backoff(int attempt, Duration baseBackoff) {
+    private Duration backoff(int attempt, Duration baseBackoff) {
         // 指數回退：base * 2^attempt（可改成 jitter）
         long factor = 1L << Math.min(attempt, 10);
         return baseBackoff.multipliedBy(factor);

@@ -13,7 +13,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration  // 声明这是一个配置类
-@ComponentScan(basePackages = "com.iisigroup.oofp")
+@ComponentScan(basePackages = "org.dotspace.oofp")
 public class TestConfig {
 
     @Bean

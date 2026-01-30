@@ -10,7 +10,7 @@ public record InboundEnvelope<T>(
         java.time.Instant receivedAt) {
 
     public enum InboundSource {
-        HTTP, MQTT, MQ, FILE, SCHEDULED, OTHER
+        HTTP, MQTT, MQ, FILE, SCHEDULED, OTHER, EMPTY_HTTP_CONTEXT
     }
 
     public boolean hasPayload() {

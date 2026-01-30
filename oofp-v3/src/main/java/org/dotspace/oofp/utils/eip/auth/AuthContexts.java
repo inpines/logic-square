@@ -1,9 +1,10 @@
 package org.dotspace.oofp.utils.eip.auth;
 
+import org.dotspace.oofp.model.dto.auth.AuthContext;
+import org.dotspace.oofp.utils.builder.GeneralBuilders;
+import org.dotspace.oofp.utils.builder.operation.WriteOperations;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import org.dotspace.oofp.model.dto.auth.AuthContext;
-import org.dotspace.oofp.utils.eip.step.AuthBindingSteps;
 
 import java.util.Set;
 
@@ -14,7 +15,7 @@ public class AuthContexts {
     // 將前一個 AuthContext 與 EntitlementsResolver 所解析出的授權資料合併
     public AuthContext enrich(
             @NonNull AuthContext prev,
-            @NonNull AuthBindingSteps.EntitlementsResolver.Entitlements ent) {
+            @NonNull EntitlementsResolver.Entitlements ent) {
 
         // 既有資料（來自 token / bindAuthContext）
         Set<String> prevRoles =
@@ -38,16 +39,16 @@ public class AuthContexts {
         Set<String> entGroups  = ent.roleGroups() == null ? Set.of() : ent.roleGroups();
         Set<String> mergedGroups = union(prevGroups, entGroups);
 
-        return AuthContext.builder()
+        return GeneralBuilders.supply(AuthContext::new)
                 // 身分相關：永遠沿用舊的（不可被 resolver 改）
-                .principalId(prev.getPrincipalId())
-                .tenantId(prev.getTenantId())
-                .tokenId(prev.getTokenId())
+                .with(WriteOperations.set(AuthContext::setPrincipalId, prev.getPrincipalId()))
+                .with(WriteOperations.set(AuthContext::setTenantId, prev.getTenantId()))
+                .with(WriteOperations.set(AuthContext::setTokenId, prev.getTokenId()))
 
                 // 授權相關：只補齊
-                .roles(mergedRoles)
-                .roleGroups(mergedGroups)
-                .authorities(mergedAuthorities)
+                .with(WriteOperations.set(AuthContext::setRoles, mergedRoles))
+                .with(WriteOperations.set(AuthContext::setRoleGroups, mergedGroups))
+                .with(WriteOperations.set(AuthContext::setAuthorities, mergedAuthorities))
 
                 .build();
     }

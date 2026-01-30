@@ -141,4 +141,23 @@ public class Violations implements Joinable<Violations> {
                         (l, r) -> StringUtils.join(l, "\n", r), HashMap::new));
     }
 
+    public boolean messagesContains(String keyword) {
+        if (StringUtils.isBlank(keyword) || null == violationCollection) {
+            return false;
+        }
+
+        return violationCollection.stream().anyMatch(
+                gv -> gv.getMessages().stream().anyMatch(msg -> msg.contains(keyword))
+        );
+    }
+
+    public boolean namesAnyMatch(@NonNull Predicate<String> namePredicate) {
+        if (null == violationCollection) {
+            return false;
+        }
+
+        return violationCollection.stream().anyMatch(
+                gv -> namePredicate.test(gv.getValidationName())
+        );
+    }
 }

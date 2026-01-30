@@ -1,11 +1,11 @@
 package org.dotspace.oofp.utils.eip.inbound;
 
-import lombok.experimental.UtilityClass;
-import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
-import org.dotspace.oofp.model.dto.behaviorstep.Violations;
 import org.dotspace.oofp.model.dto.eip.InboundAttrKeys;
 import org.dotspace.oofp.model.dto.eip.InboundEnvelope;
+import org.dotspace.oofp.model.dto.behaviorstep.Violations;
+import org.dotspace.oofp.model.dto.behaviorstep.StepContext;
 import org.dotspace.oofp.utils.functional.monad.validation.Validation;
+import lombok.experimental.UtilityClass;
 
 import java.util.function.Function;
 
